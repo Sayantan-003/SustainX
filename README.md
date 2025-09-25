@@ -1,5 +1,5 @@
 
-# SustainX
+# MaintaincePro
 
 A modern, full-stack web application for preventive maintenance management, featuring real-time dashboards, secure authentication, and robust analytics for industrial or facility operations.
 
