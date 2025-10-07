@@ -5,7 +5,7 @@ import LoginPage from "./Pages/LoginForm.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 
-import Dashboard from "./components/Dashboard/Dashboard.jsx";
+import Dashboard from "./Pages/Dashboard.jsx";
 
 // Helper: Role-based dashboards
 const RoleBasedReports = ({ roleConfig }) => {
