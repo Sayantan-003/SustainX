@@ -399,6 +399,9 @@ import { Eye, EyeOff, Lock, Shield, Wrench, AlertCircle, User } from 'lucide-rea
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+
+
+
 const LoginForm = () => {
   const navigate = useNavigate();
   const { user, login, loading } = useAuth();
