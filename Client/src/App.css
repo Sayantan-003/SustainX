@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+
+/* Allow native select dropdowns to escape their container */
+select {
+  position: relative;
+  z-index: 20;
+}
+
+.modal, .dialog, .form-container, .scroll-area {
+  overflow: visible !important;
+}
