@@ -1,47 +1,100 @@
+// hooks/useWorkOrders.js
 import { useState, useEffect } from "react";
-
-const STORAGE_KEY = "workOrders";
-
-const initialWorkOrders = [
-  {
-    id: "002",
-    title: "Suite B Temp High",
-    description: "Perform inspection on HVAC compressor",
-    due: "2025-10-06T11:46:00",
-    start: "2025-10-01T09:00:00",
-    status: "Open",
-    priority: "Low",
-  },
-  {
-    id: "001",
-    title: "Welcome! Start Here",
-    description: "Work Orders are the main way to track maintenance tasks",
-    due: "2025-10-06T11:46:00",
-    start: "2025-09-25T08:30:00",
-    status: "Open",
-    priority: "Medium",
-  },
-];
+import { getAllWorkOrders } from "../api/WorkOrders.js";
 
 export default function useWorkOrders() {
   const [workOrders, setWorkOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [pagination, setPagination] = useState(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      setWorkOrders(JSON.parse(saved));
-    } else {
-      setWorkOrders(initialWorkOrders);
+  // Fetch work orders from API
+  const fetchWorkOrders = async (params = {}) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const result = await getAllWorkOrders(params);
+      
+      if (result.ok) {
+        // Transform MongoDB data to match frontend format
+        const transformedData = result.data.map((wo) => ({
+          id: wo._id,
+          title: wo.title || "",
+          description: wo.description || "",
+          category: wo.category || "",
+          priority: wo.priority || "Low",
+          status: wo.status || "Open",
+          startDate: wo.startDate,
+          dueDate: wo.dueDate,
+          duration: wo.duration || 0,
+          asset: wo.asset || "",
+          location: wo.location || "",
+          primaryAssignee: wo.primaryAssignee || "",
+          team: wo.team || "",
+          additionalAssignees: wo.additionalAssignees || "",
+          signatureRequired: wo.signatureRequired || false,
+          photos: wo.photos || [],
+          checklists: wo.checklists || [],
+          createdAt: wo.createdAt,
+          updatedAt: wo.updatedAt,
+        }));
+        
+        setWorkOrders(transformedData);
+        setPagination(result.pagination);
+      } else {
+        setError(result.message || "Failed to fetch work orders");
+        setWorkOrders([]);
+      }
+    } catch (err) {
+      console.error("Error fetching work orders:", err);
+      setError("An error occurred while fetching work orders");
+      setWorkOrders([]);
+    } finally {
+      setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(workOrders));
-  }, [workOrders]);
-
-  const addWorkOrder = (wo) => {
-    setWorkOrders((prev) => [...prev, wo]);
   };
 
-  return { workOrders, setWorkOrders, addWorkOrder };
+  // Fetch work orders on component mount
+  useEffect(() => {
+    fetchWorkOrders();
+  }, []);
+
+  // Add new work order (optimistic update + refetch)
+  const addWorkOrder = async (workOrder) => {
+    // Optimistically add to local state
+    setWorkOrders((prev) => [workOrder, ...prev]);
+    
+    // Refetch to get the actual data from server
+    await fetchWorkOrders();
+  };
+
+  // Update work order
+  const updateWorkOrder = async (id, updatedData) => {
+    setWorkOrders((prev) =>
+      prev.map((wo) => (wo.id === id ? { ...wo, ...updatedData } : wo))
+    );
+    
+    // Optionally refetch to sync with server
+    await fetchWorkOrders();
+  };
+
+  // Delete work order
+  const deleteWorkOrder = async (id) => {
+    setWorkOrders((prev) => prev.filter((wo) => wo.id !== id));
+    
+    // Optionally refetch to sync with server
+    await fetchWorkOrders();
+  };
+
+  return {
+    workOrders,
+    loading,
+    error,
+    pagination,
+    fetchWorkOrders,
+    addWorkOrder,
+    updateWorkOrder,
+    deleteWorkOrder,
+  };
 }
