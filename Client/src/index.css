@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+
+select {
+  position: relative;
+  z-index: 20;
+}
+
+.modal, .dialog, .form-container, .scroll-area {
+  overflow: visible !important;
+}
