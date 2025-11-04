@@ -7,6 +7,7 @@ import {
   Layers,
   MessageSquare,
   Tag,
+  Gem,
   Package,
   BookOpen,
   Gauge,
@@ -138,6 +139,10 @@ export default function Sidebar() {
           <div className="flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors">
             <Tag className="w-5 h-5" />
             Categories
+          </div>
+          <div className="flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors">
+            <Gem className="w-5 h-5" />
+            Assets
           </div>
           <div className="flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors">
             <Package className="w-5 h-5" />

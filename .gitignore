@@ -28,3 +28,11 @@ dist-ssr
 Server/node_modules
 Client/node_modules
 sustainX\Client\node_modules
+
+.env
+*.env
+Server/.env.development
+Server/.env.production
+Client/.env
+Server/addUser.js
+Server/UserData.json
