@@ -11,10 +11,11 @@ import {
   BookOpen,
   Gauge,
   LogOut,
+  ListChecks,
 } from "lucide-react";
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/AuthContext";
 
-export default function Sidebar() {
+export default function Sidebar({ activeSection, onNavigate }) {
   const [showLogoutMenu, setShowLogoutMenu] = useState(false);
   const menuRef = useRef(null);
   const { user, logout } = useAuth();
@@ -50,6 +51,12 @@ export default function Sidebar() {
       .join("")
       .toUpperCase()
       .slice(0, 2);
+  };
+
+  const handleNavClick = (section) => {
+    if (onNavigate) {
+      onNavigate(section);
+    }
   };
 
   return (
@@ -111,46 +118,109 @@ export default function Sidebar() {
       {/* Main Navigation */}
       <div className="p-4 flex-1 overflow-y-auto">
         <nav className="space-y-1 text-sm">
-          <a className="flex items-center gap-3 p-2.5 rounded-lg bg-emerald-50 text-emerald-700 font-medium border border-emerald-200 cursor-pointer">
+          <button
+            onClick={() => handleNavClick("work-orders")}
+            className={`w-full flex items-center gap-3 p-2.5 rounded-lg font-medium border cursor-pointer transition-colors ${
+              activeSection === "work-orders"
+                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                : "hover:bg-slate-50 text-slate-600 hover:text-slate-900 border-transparent"
+            }`}
+          >
             <ClipboardList className="w-5 h-5" />
             Work Orders
-          </a>
-          <a className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 cursor-pointer transition-colors">
+          </button>
+          
+          <button
+            onClick={() => handleNavClick("checklists")}
+            className={`w-full flex items-center gap-3 p-2.5 rounded-lg font-medium border cursor-pointer transition-colors ${
+              activeSection === "checklists"
+                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                : "hover:bg-slate-50 text-slate-600 hover:text-slate-900 border-transparent"
+            }`}
+          >
+            <ListChecks className="w-5 h-5" />
+            Checklists
+          </button>
+
+          <button
+            onClick={() => handleNavClick("preventive-maintenance")}
+            className={`w-full flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-colors ${
+              activeSection === "preventive-maintenance"
+                ? "bg-emerald-50 text-emerald-700 font-medium border border-emerald-200"
+                : "hover:bg-slate-50 text-slate-600 hover:text-slate-900"
+            }`}
+          >
             <CalendarClock className="w-5 h-5" />
             Preventive Maintenance
-          </a>
-          <a className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 cursor-pointer transition-colors">
+          </button>
+
+          <button
+            onClick={() => handleNavClick("scheduler")}
+            className={`w-full flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-colors ${
+              activeSection === "scheduler"
+                ? "bg-emerald-50 text-emerald-700 font-medium border border-emerald-200"
+                : "hover:bg-slate-50 text-slate-600 hover:text-slate-900"
+            }`}
+          >
             <Layers className="w-5 h-5" />
             Scheduler
-          </a>
-          <a className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 cursor-pointer transition-colors">
+          </button>
+
+          <button
+            onClick={() => handleNavClick("analytics")}
+            className={`w-full flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-colors ${
+              activeSection === "analytics"
+                ? "bg-emerald-50 text-emerald-700 font-medium border border-emerald-200"
+                : "hover:bg-slate-50 text-slate-600 hover:text-slate-900"
+            }`}
+          >
             <BarChart3 className="w-5 h-5" />
             Analytics
-          </a>
-          <a className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 cursor-pointer transition-colors">
+          </button>
+
+          <button
+            onClick={() => handleNavClick("requests")}
+            className={`w-full flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-colors ${
+              activeSection === "requests"
+                ? "bg-emerald-50 text-emerald-700 font-medium border border-emerald-200"
+                : "hover:bg-slate-50 text-slate-600 hover:text-slate-900"
+            }`}
+          >
             <MessageSquare className="w-5 h-5" />
             Requests
-          </a>
+          </button>
         </nav>
 
         {/* Secondary Section */}
         <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-500 space-y-5">
-          <div className="flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors">
+          <button
+            onClick={() => handleNavClick("categories")}
+            className="w-full flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors"
+          >
             <Tag className="w-5 h-5" />
             Categories
-          </div>
-          <div className="flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors">
+          </button>
+          <button
+            onClick={() => handleNavClick("parts-inventory")}
+            className="w-full flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors"
+          >
             <Package className="w-5 h-5" />
             Parts & Inventory
-          </div>
-          <div className="flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors">
+          </button>
+          <button
+            onClick={() => handleNavClick("library")}
+            className="w-full flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors"
+          >
             <BookOpen className="w-5 h-5" />
             Library
-          </div>
-          <div className="flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors">
+          </button>
+          <button
+            onClick={() => handleNavClick("meters")}
+            className="w-full flex items-center gap-3 hover:text-slate-700 cursor-pointer transition-colors"
+          >
             <Gauge className="w-5 h-5" />
             Meters
-          </div>
+          </button>
         </div>
       </div>
     </aside>
