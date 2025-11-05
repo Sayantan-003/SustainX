@@ -9,7 +9,7 @@ export function generateAccessToken(user) {
   return jwt.sign(
     { username: user.username, role: user.role, tokenVersion: user.tokenVersion },
     ACCESS_SECRET,
-    { expiresIn: '15m', issuer: 'cmms-auth-server', audience: 'cmms-client' }
+    { expiresIn: '1h', issuer: 'cmms-auth-server', audience: 'cmms-client' }
   );
 }
 

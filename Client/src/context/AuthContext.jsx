@@ -15,7 +15,7 @@ export const useAuth = () => {
 };
 
 // Configuration
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 const TOKEN_REFRESH_BUFFER = 5 * 60 * 1000; // Refresh token 5 minutes before expiry
 
 export const AuthProvider = ({ children }) => {
@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       
       const response = await axios.post(
-        'http://localhost:5000/api/auth/login', 
+        `${API_BASE}/api/auth/login`, 
         { username, password },
         {
           withCredentials: true,
