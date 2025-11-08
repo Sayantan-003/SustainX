@@ -10,6 +10,7 @@ import connectDB from "./config/db.js";
 import { verifyToken } from "./middleware/auth.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import workOrderRoutes from "./routes/WorkOrder.routes.js";
+import checklistRoutes from './routes/checklist.routes.js'
 import authRoutes from "./routes/auth.routes.js"
 import cookieParser from 'cookie-parser';
 
@@ -23,7 +24,7 @@ const app = express();
 
 // =================== Middleware ===================
 const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: "http://localhost:5173",
   credentials: true,
 };
 
@@ -40,6 +41,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api", verifyToken, uploadRoutes);
 app.use("/api/workorders", verifyToken, workOrderRoutes);
+app.use("/api/checklists", verifyToken, checklistRoutes);
 
 // =================== DB + Server Start ===================
 const PORT = process.env.PORT || 5000;

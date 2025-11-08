@@ -1,7 +1,7 @@
 // routes/checklistRoutes.js
-const express = require('express');
+import express from  'express';
 const router = express.Router();
-const {
+import {
   createChecklist,
   getAllChecklists,
   getChecklistById,
@@ -13,11 +13,9 @@ const {
   deleteTask,
   duplicateChecklist,
   getChecklistStats
-} = require('../controllers/checklistController');
-const { protect } = require('../middleware/authMiddleware');
+} from '../controller/checklist.controller.js';
 
-// Apply authentication middleware to all routes
-router.use(protect);
+
 
 // Checklist CRUD routes
 router.route('/')
@@ -46,4 +44,4 @@ router.route('/:id/tasks/:taskId')
 // Toggle task completion
 router.patch('/:id/tasks/:taskId/toggle', toggleTaskCompletion);
 
-module.exports = router;
+export default router;

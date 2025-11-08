@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, Plus, MoreVertical, Package, Trash, Copy } from "lucide-react";
+import { X, Plus, MoreVertical, Package, Trash, Copy, AlertCircle } from "lucide-react";
+import { createChecklist } from "../api/Checklist";
 
 export default function CreateChecklist() {
   const navigate = useNavigate();
@@ -17,6 +18,10 @@ export default function CreateChecklist() {
   const [showMoreMenu, setShowMoreMenu] = useState(null);
   const [showAssetDropdown, setShowAssetDropdown] = useState(false);
   const [showEditAssetDropdown, setShowEditAssetDropdown] = useState(false);
+  
+  // API state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   // Sample assets - replace with your actual data
   const assets = [
@@ -84,6 +89,52 @@ export default function CreateChecklist() {
     setEditTask({ description: "", asset: "" });
   };
 
+  // Handle checklist creation
+  const handleCreateChecklist = async () => {
+    // Clear previous errors
+    setError(null);
+
+    // Validate
+    if (!checklistName.trim()) {
+      setError("Checklist name is required");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Prepare data for API (remove temporary IDs)
+      const checklistData = {
+        name: checklistName.trim(),
+        section: section.trim(),
+        tasks: tasks.map(task => ({
+          description: task.description,
+          asset: task.asset || ""
+        }))
+      };
+
+      // Call API
+      const response = await createChecklist(checklistData);
+
+      if (response.ok) {
+        // Success - navigate back to checklists list
+        navigate("/checklists", { 
+          state: { 
+            message: response.message || "Checklist created successfully" 
+          } 
+        });
+      } else {
+        // Handle API error
+        setError(response.message || "Failed to create checklist");
+      }
+    } catch (err) {
+      console.error("Error creating checklist:", err);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
@@ -115,6 +166,23 @@ export default function CreateChecklist() {
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-6 py-8">
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-red-800 text-sm font-medium">Error</p>
+              <p className="text-red-700 text-sm mt-1">{error}</p>
+            </div>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-400 hover:text-red-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         {/* Checklist Name and Description */}
         <div className="mb-8 space-y-3">
           {/* Checklist Title */}
@@ -243,7 +311,7 @@ export default function CreateChecklist() {
                         Save
                       </button>
                     </div>
-                                      </div>
+                    </div>
                   </div>
                 </>
               ) : (
@@ -439,14 +507,26 @@ export default function CreateChecklist() {
           <button
             onClick={() => navigate("/checklists")}
             className="px-6 py-2.5 border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors"
+            disabled={isSubmitting}
           >
             Cancel
           </button>
           <button
-            disabled={!checklistName.trim()}
-            className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed"
+            onClick={handleCreateChecklist}
+            disabled={!checklistName.trim() || isSubmitting}
+            className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed flex items-center space-x-2"
           >
-            Create Checklist
+            {isSubmitting ? (
+              <>
+                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Creating...</span>
+              </>
+            ) : (
+              <span>Create Checklist</span>
+            )}
           </button>
         </div>
       </div>

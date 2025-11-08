@@ -1,5 +1,6 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+//utils/token.js
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
 const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
@@ -7,9 +8,14 @@ const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 // issue access token
 export function generateAccessToken(user) {
   return jwt.sign(
-    { username: user.username, role: user.role, tokenVersion: user.tokenVersion },
+    {
+      _id: user._id,
+      username: user.username,
+      role: user.role,
+      tokenVersion: user.tokenVersion,
+    },
     ACCESS_SECRET,
-    { expiresIn: '1h', issuer: 'cmms-auth-server', audience: 'cmms-client' }
+    { expiresIn: "1h", issuer: "cmms-auth-server", audience: "cmms-client" }
   );
 }
 
@@ -18,7 +24,7 @@ export function generateRefreshToken(user) {
   return jwt.sign(
     { username: user.username, tokenVersion: user.tokenVersion },
     REFRESH_SECRET,
-    { expiresIn: '7d', issuer: 'cmms-auth-server', audience: 'cmms-client' }
+    { expiresIn: "7d", issuer: "cmms-auth-server", audience: "cmms-client" }
   );
 }
 

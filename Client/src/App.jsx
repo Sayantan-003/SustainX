@@ -1,126 +1,3 @@
-// // import React from "react";
-// // import { Route, Routes, BrowserRouter } from "react-router-dom";
-// // import "./App.css";
-// // import LoginPage from "./Pages/LoginForm.jsx";
-// // import ProtectedRoute from "./ProtectedRoute.jsx";
-// // import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
-
-// // import Dashboard from "./Pages/Dashboard.jsx";
-// // import ChecklistPage from "./Pages/ChecklistPage.jsx";
-
-// // // Helper: Role-based dashboards
-// // const RoleBasedReports = ({ roleConfig }) => {
-// //   const { user } = useContext(AuthContext);
-
-// //   if (!user || !user.role) {
-// //     return (
-// //       <div className="flex items-center justify-center py-12">
-// //         <div className="text-gray-500">Loading dashboard...</div>
-// //       </div>
-// //     );
-// //   }
-
-// //   return (
-// //     <>
-// //       {roleConfig.dashboards.prep.includes(user.role) && (
-// //         <div id="dahsboard">
-// //           <Dashboard />
-// //         </div>
-// //       )}
-// //     </>
-// //   );
-// // };
-
-// // const App = () => {
-// //   const roleConfig = {
-// //     admin: ["admin"],
-// //     technician: ["technician"],
-// //     supervisor: ["supervisor"],
-// //   };
-
-// //   return (
-// //     <AuthProvider>
-// //       <BrowserRouter>
-// //         <Routes>
-// //           {/*Public Page */}
-// //           <Route path="/login" element={<LoginPage />} />
-
-// //           {/*Protected Routes*/}
-// //           <Route
-// //             path="/"
-// //             element={
-// //               <ProtectedRoute
-// //                 allowedRoles={[...roleConfig.admin, ...roleConfig.supervisor]}
-// //               >
-// //                 <Dashboard />
-// //               </ProtectedRoute>
-// //             }
-// //           />
-// //           <Route
-// //             path="/checklists"
-// //             element={<ProtectedRoute allowedRoles={[...roleConfig.admin, roleConfig.supervisor]}>
-// //               <ChecklistPage/>
-// //             </ProtectedRoute>}
-// //           />
-// //         </Routes>
-// //       </BrowserRouter>
-// //     </AuthProvider>
-// //   );
-// // };
-
-// // export default App;
-
-// import React from "react";
-// import { Route, Routes, BrowserRouter } from "react-router-dom";
-// import "./App.css";
-// import LoginPage from "./Pages/LoginForm.jsx";
-// import ProtectedRoute from "./ProtectedRoute.jsx";
-// import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
-
-// import Dashboard from "./Pages/Dashboard.jsx";
-// import ChecklistPage from "./Pages/ChecklistPage.jsx"; // Import the new page
-
-// const App = () => {
-//   const roleConfig = {
-//     admin: ["admin"],
-//     technician: ["technician"],
-//     supervisor: ["supervisor"],
-//   };
-
-//   return (
-//     <AuthProvider>
-//       <BrowserRouter>
-//         <Routes>
-//           {/* Public Page */}
-//           <Route path="/login" element={<LoginPage />} />
-
-//           {/* Protected Routes */}
-//           <Route
-//             path="/"
-//             element={
-//               <ProtectedRoute
-//                 allowedRoles={[...roleConfig.admin, ...roleConfig.supervisor]}
-//               >
-//                 <Dashboard />
-//               </ProtectedRoute>
-//             }
-//           />
-//           <Route
-//             path="/checklists"
-//             element={
-//               <ProtectedRoute allowedRoles={[...roleConfig.admin, ...roleConfig.supervisor]}>
-//                 <ChecklistPage />
-//               </ProtectedRoute>
-//             }
-//           />
-//         </Routes>
-//       </BrowserRouter>
-//     </AuthProvider>
-//   );
-// };
-
-// export default App;
-
 import React from "react";
 import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import "./App.css";
@@ -129,7 +6,8 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 import WorkOrderPage from "./Pages/WorkOrderPage.jsx";
 import ChecklistPage from "./Pages/ChecklistPage.jsx";
-import CreateChecklistPage from "./Pages/CreateCheckListPage.jsx" 
+import CreateChecklistPage from "./Pages/CreateCheckListPage.jsx";
+import ChecklistDetailPage from "./pages/ChecklistDetailPage";
 import { Loader2 } from "lucide-react";
 
 // Loading component
@@ -197,6 +75,20 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      
+      <Route
+        path="/checklists/:id"
+        element={
+          <ProtectedRoute
+            allowedRoles={[...roleConfig.admin, ...roleConfig.supervisor]}
+          >
+            <ChecklistDetailPage />
+          </ProtectedRoute>
+        }
+      />
+
+    
 
       {/* Catch all - redirect to login if not authenticated, otherwise to dashboard */}
       <Route
