@@ -130,6 +130,40 @@ export async function getWorkOrderById(id) {
 }
 
 // PUT: Update work order
+// export async function updateWorkOrder(id, formData) {
+//   try {
+//     const token = localStorage.getItem("accessToken");
+
+//     const res = await fetch(`${API_BASE}/api/workorders/${id}`, {
+//       method: "PUT",
+//       headers: {
+//         // DON'T set Content-Type for FormData
+//         ...(token ? { Authorization: `Bearer ${token}` } : {}),
+//       },
+//       credentials: "include",
+//       body: formData,
+//     });
+
+//     const data = await res.json();
+
+//     return {
+//       ok: res.ok,
+//       status: res.status,
+//       data: data.data || null,
+//       message: res.ok ? "Work order updated successfully" : data.message,
+//     };
+//   } catch (err) {
+//     console.error("Network error:", err);
+//     return {
+//       ok: false,
+//       status: 0,
+//       data: null,
+//       message: "Network error. Please try again.",
+//     };
+//   }
+// }
+
+// PUT: Update work order
 export async function updateWorkOrder(id, formData) {
   try {
     const token = localStorage.getItem("accessToken");

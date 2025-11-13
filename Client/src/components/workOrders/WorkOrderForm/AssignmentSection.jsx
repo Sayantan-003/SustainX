@@ -41,7 +41,7 @@ export default function AssignmentSection({ register, errors }) {
         {/* Team */}
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Team
+            Team/Contractor Name
           </label>
           <input
             type="text"
