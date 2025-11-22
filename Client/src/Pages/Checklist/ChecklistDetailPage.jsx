@@ -11,7 +11,7 @@ import {
   MoreVertical,
   Save
 } from "lucide-react";
-import Sidebar from "../components/layout/Sidebar";
+import Sidebar from "../../components/layout/Sidebar";
 import {
   getChecklistById,
   updateChecklist,
@@ -20,7 +20,7 @@ import {
   deleteTask,
   toggleTaskCompletion,
   deleteChecklist
-} from "../api/Checklist";
+} from "../../api/Checklist";
 
 import CloseIcon from "../assets/left_panel_close_icon.svg";
 import OpenIcon from "../assets/left_panel_open_icon.svg";

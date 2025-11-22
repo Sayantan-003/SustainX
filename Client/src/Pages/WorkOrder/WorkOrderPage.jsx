@@ -1,13 +1,13 @@
 import { useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast"; 
-import Sidebar from "../components/layout/Sidebar";
-import Header from "../components/layout/Header";
-import WorkOrderFilters from "../components/workOrders/WorkOrderFilters";
-import WorkOrdersTable from "../components/workOrders/WorkOrdersTable";
-import WorkOrderModal from "../components/workOrders/WorkOrderModal";
-import WorkOrderDetailedModal from "../components/workOrders/WorkOrderDetailedModal";
-import useWorkOrders from "../hooks/useWorkOrders";
+import Sidebar from "../../components/layout/Sidebar";
+import Header from "../../components/layout/Header";
+import WorkOrderFilters from "../../components/workOrders/WorkOrderFilters";
+import WorkOrdersTable from "../../components/workOrders/WorkOrdersTable";
+import WorkOrderModal from "../../components/workOrders/WorkOrderModal";
+import WorkOrderDetailedModal from "../../components/workOrders/WorkOrderDetailedModal";
+import useWorkOrders from "../../hooks/useWorkOrders";
 import { Loader2 } from "lucide-react";
 
 export default function WorkOrderPage() {

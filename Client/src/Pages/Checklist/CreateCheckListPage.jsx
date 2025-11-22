@@ -1,5 +1,5 @@
 import React from "react";
-import CreateChecklist from "../components/CreateChecklist";
+import CreateChecklist from "../../components/CreateChecklist";
 
 
 const CreateChecklistPage = () => {
