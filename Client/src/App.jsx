@@ -4,10 +4,10 @@ import "./App.css";
 import LoginPage from "./Pages/LoginForm.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
-import WorkOrderPage from "./Pages/WorkOrderPage.jsx";
-import ChecklistPage from "./Pages/ChecklistPage.jsx";
-import CreateChecklistPage from "./Pages/CreateCheckListPage.jsx";
-import ChecklistDetailPage from "./pages/ChecklistDetailPage";
+import WorkOrderPage from "./Pages/WorkOrder/WorkOrderPage.jsx";
+import ChecklistPage from "./Pages/Checklist/ChecklistPage.jsx";
+import CreateChecklistPage from "./Pages/Checklist/CreateCheckListPage.jsx";
+import ChecklistDetailPage from "./pages/Checklist/ChecklistDetailPage.jsx";
 import { Loader2 } from "lucide-react";
 
 // Loading component

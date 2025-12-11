@@ -628,109 +628,6 @@
 
 
 
-// controllers/workorder.controller.js
-
-import WorkOrder from "../models/WorkOrder.model.js";
-import { cloudinary } from "../config/cloudinary.js";
-
-// @desc    Create a new work order
-// @route   POST /api/workorders
-// @access  Private (add auth middleware later)
-export const createWorkOrder = async (req, res) => {
-  try {
-    const workOrderData = req.body;
-
-    // Handle photos if uploaded
-    if (req.files && req.files.length > 0) {
-      workOrderData.photos = req.files.map((file) => ({
-        url: file.path,
-        publicId: file.filename,
-      }));
-    } else {
-      // If no photos, set to empty array
-      workOrderData.photos = [];
-    }
-
-    // Parse checklists if sent as string (from FormData)
-    if (typeof workOrderData.checklists === "string") {
-      try {
-        workOrderData.checklists = JSON.parse(workOrderData.checklists);
-      } catch (parseError) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid checklists format",
-        });
-      }
-    }
-
-    // Filter out empty checklists and tasks
-    if (workOrderData.checklists && Array.isArray(workOrderData.checklists)) {
-      workOrderData.checklists = workOrderData.checklists
-        .map((checklist) => ({
-          ...checklist,
-          // Filter out tasks with empty names
-          tasks: checklist.tasks.filter((task) => task.name && task.name.trim() !== ""),
-        }))
-        // Remove checklists with no valid tasks
-        .filter((checklist) => checklist.tasks.length > 0);
-    } else {
-      // If no checklists, set to empty array
-      workOrderData.checklists = [];
-    }
-
-    // Convert string booleans to actual booleans
-    if (typeof workOrderData.signatureRequired === "string") {
-      workOrderData.signatureRequired = workOrderData.signatureRequired === "true";
-    }
-
-    // Convert duration to number if it's a string
-    if (workOrderData.duration && typeof workOrderData.duration === "string") {
-      workOrderData.duration = parseFloat(workOrderData.duration);
-    }
-
-    // Create the work order
-    const workOrder = new WorkOrder(workOrderData);
-    await workOrder.save();
-
-    res.status(201).json({
-      success: true,
-      message: "Work order created successfully",
-      data: workOrder,
-    });
-  } catch (error) {
-    console.error("Error creating work order:", error);
-
-    // Clean up uploaded images if work order creation fails
-    if (req.files && req.files.length > 0) {
-      const deletePromises = req.files.map((file) =>
-        cloudinary.uploader.destroy(file.filename).catch((err) => {
-          console.error("Error deleting image:", err);
-        })
-      );
-      await Promise.allSettled(deletePromises);
-    }
-
-    // Handle validation errors
-    if (error.name === "ValidationError") {
-      const errors = Object.keys(error.errors).reduce((acc, key) => {
-        acc[key] = error.errors[key].message;
-        return acc;
-      }, {});
-
-      return res.status(400).json({
-        success: false,
-        message: "Validation failed",
-        errors: errors,
-      });
-    }
-
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to create work order",
-    });
-  }
-};
-
 // @desc    Update work order
 // @route   PUT /api/workorders/:id
 // @access  Private
@@ -848,6 +745,117 @@ export const createWorkOrder = async (req, res) => {
 //     });
 //   }
 // };
+
+
+
+
+
+// controllers/workorder.controller.js
+
+import WorkOrder from "../models/WorkOrder.model.js";
+import { cloudinary } from "../config/cloudinary.js";
+
+// @desc    Create a new work order
+// @route   POST /api/workorders
+// @access  Private (add auth middleware later)
+export const createWorkOrder = async (req, res) => {
+  try {
+    const workOrderData = req.body;
+
+    // Handle photos if uploaded
+    if (req.files && req.files.length > 0) {
+      workOrderData.photos = req.files.map((file) => ({
+        url: file.path,
+        publicId: file.filename,
+      }));
+    } else {
+      // If no photos, set to empty array
+      workOrderData.photos = [];
+    }
+
+    // Parse checklists if sent as string (from FormData)
+    if (typeof workOrderData.checklists === "string") {
+      try {
+        workOrderData.checklists = JSON.parse(workOrderData.checklists);
+      } catch (parseError) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid checklists format",
+        });
+      }
+    }
+
+    // Filter out empty checklists and tasks
+    if (workOrderData.checklists && Array.isArray(workOrderData.checklists)) {
+      workOrderData.checklists = workOrderData.checklists
+        .map((checklist) => ({
+          ...checklist,
+          // Filter out tasks with empty names
+          tasks: checklist.tasks.filter((task) => task.name && task.name.trim() !== ""),
+        }))
+        // Remove checklists with no valid tasks
+        .filter((checklist) => checklist.tasks.length > 0);
+    } else {
+      // If no checklists, set to empty array
+      workOrderData.checklists = [];
+    }
+
+    // Convert string booleans to actual booleans
+    if (typeof workOrderData.signatureRequired === "string") {
+      workOrderData.signatureRequired = workOrderData.signatureRequired === "true";
+    }
+
+    // Convert duration to number if it's a string
+    if (workOrderData.duration && typeof workOrderData.duration === "string") {
+      workOrderData.duration = parseFloat(workOrderData.duration);
+    }
+
+    // Create the work order
+    const workOrder = new WorkOrder(workOrderData);
+    await workOrder.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Work order created successfully",
+      data: workOrder,
+    });
+  } catch (error) {
+    console.error("Error creating work order:", error);
+
+    // Clean up uploaded images if work order creation fails
+    if (req.files && req.files.length > 0) {
+      const deletePromises = req.files.map((file) =>
+        cloudinary.uploader.destroy(file.filename).catch((err) => {
+          console.error("Error deleting image:", err);
+        })
+      );
+      await Promise.allSettled(deletePromises);
+    }
+
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      const errors = Object.keys(error.errors).reduce((acc, key) => {
+        acc[key] = error.errors[key].message;
+        return acc;
+      }, {});
+
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        errors: errors,
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to create work order",
+    });
+  }
+};
+
+
+
+
 export const updateWorkOrder = async (req, res) => {
   try {
     const { id } = req.params;

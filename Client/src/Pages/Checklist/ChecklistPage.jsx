@@ -5,8 +5,8 @@ import { Search, MoreVertical, SlidersHorizontal } from "lucide-react";
 import Sidebar from "../../components/layout/Sidebar";
 import { getAllChecklists } from "../../api/Checklist";
 
-import CloseIcon from "../assets/left_panel_close_icon.svg";
-import OpenIcon from "../assets/left_panel_open_icon.svg";
+import CloseIcon from "../../assets/left_panel_close_icon.svg";
+import OpenIcon from "../../assets/left_panel_open_icon.svg";
 
 export default function ChecklistPage() {
   const navigate = useNavigate();

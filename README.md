@@ -1,5 +1,5 @@
 
-# MaintaincePro
+# SustainXPro
 
 A modern, full-stack web application for preventive maintenance management, featuring real-time dashboards, secure authentication, and robust analytics for industrial or facility operations.
 
@@ -33,7 +33,7 @@ A modern, full-stack web application for preventive maintenance management, feat
 
 ### 1. Clone the repository
 ```sh
-git clone <your-repo-url>
+git clone https://github.com/Sayantan-003/SustainX.git
 cd SustainX
 ```
 
@@ -150,4 +150,4 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 ---
 
 
-©MaintaincePro. All rights reserved.
+©SustainX. All rights reserved.

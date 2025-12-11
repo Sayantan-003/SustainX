@@ -22,8 +22,8 @@ import {
   deleteChecklist
 } from "../../api/Checklist";
 
-import CloseIcon from "../assets/left_panel_close_icon.svg";
-import OpenIcon from "../assets/left_panel_open_icon.svg";
+import CloseIcon from "../../assets/left_panel_close_icon.svg";
+import OpenIcon from "../../assets/left_panel_open_icon.svg";
 
 export default function ChecklistDetailPage() {
   const navigate = useNavigate();
